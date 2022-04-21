@@ -2,7 +2,9 @@
 // Importaciones
 
 const bcrypt = require("bcryptjs/dist/bcrypt");
+const { response } = require("express");
 const { generarJWT } = require("../helpers/generar-JWT");
+const { googleVerify } = require("../helpers/google-verify");
 const { Usuarios } = require("../models/usuario");
 
 
@@ -61,16 +63,29 @@ const login = async (req,res) => {
 
 //POST /api/auth/google
 
-const googleSignin = (req,res) => {
+const googleSignin = async (req,res) => {
 
-    console.log("POST /api/auth/google")
+    try {
 
-    const {id_token}= req.body;
+        console.log("POST /api/auth/google")
 
-    res.status(200).json({
-        msg: "Its OK",
-        id_token
-    })
+        const {id_token}= req.body;
+
+        const googleUser = await googleVerify(id_token);
+
+        console.log(googleUser)
+
+        res.status(200).json({
+            msg: "Its OK",
+            id_token,
+            googleUser
+        })
+        
+    } catch (error) {
+        res.status(400).json({
+            msg: "Google token is not valid"
+        })
+    }
 
 }
 
