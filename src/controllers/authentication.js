@@ -59,6 +59,21 @@ const login = async (req,res) => {
 }
 
 
+//POST /api/auth/google
+
+const googleSignin = (req,res) => {
+
+    console.log("POST /api/auth/google")
+
+    const {id_token}= req.body;
+
+    res.status(200).json({
+        msg: "Its OK",
+        id_token
+    })
+
+}
+
 
 
 
@@ -66,5 +81,6 @@ const login = async (req,res) => {
 // Exportaciones
 
 module.exports = {
-   login
+   login,
+   googleSignin
 }
